@@ -9,51 +9,74 @@ app.secret_key = 'your-secret-key-here'
 PRODUCTS = [
     {
         'id': 1,
-        'name': 'MacBook Pro 14"',
-        'price': 79999,
-        'category': 'คอมพิวเตอร์',
-        'description': 'MacBook Pro พร้อม M3 Pro',
+        'name': 'แพลนเนอร์ (Planner)"',
+        'price': 79,
+        'category': 'หมวดบันทึกประจำวัน',
         'image': 'product1.png'
     },
     {
         'id': 2,
-        'name': 'iPhone 15 Pro',
-        'price': 44999,
-        'category': 'อิเล็กทรอนิกส์',
-        'description': 'iPhone 15 Pro 256GB',
+        'name': 'สมุดเช็คลิสต์ (Checklist Book)',
+        'price': 49,
+        'category': 'หมวดบันทึกประจำวัน',
+        'description': 'สมุดสำหรับจดบันทึกสิ่งที่ต้องทำรายวัน รายสัปดาห์ หรือรายเดือน ช่วยให้ไม่ลืมงานสำคัญและจัดลำดับความสำคัญได้ดี',
         'image': 'product2.png'
     },
     {
         'id': 3,
-        'name': 'Canon EOS R5',
-        'price': 149999,
-        'category': 'กล้อง',
-        'description': 'กล้อง DSLR มืออาชีพ',
+        'name': 'สมุดติดตามนิสัย (Habit Tracker)',
+        'price': 39,
+        'category': 'หมวดบันทึกประจำวัน',
+        'description': 'ใช้บันทึกกิจกรรมซ้ำๆ ที่อยากทำเป็นประจำ',
         'image': 'product3.png'
     },
     {
         'id': 4,
-        'name': 'iPad Air',
-        'price': 29999,
-        'category': 'คอมพิวเตอร์',
-        'description': 'iPad Air 11 นิ้ว',
+        'name': 'บันทึกความสุข (Gratitude Journal)',
+        'price': 59,
+        'category': 'หมวดพัฒนาความคิดและจิตใจ',
+        'description': 'สมุดที่มี Template ให้เขียนขอบคุณเรื่องดีๆ 3 ข้อในแต่ละวัน',
         'image': 'product4.png'
     },
     {
         'id': 5,
-        'name': 'Sony WH-1000XM5',
-        'price': 14999,
-        'category': 'อิเล็กทรอนิกส์',
-        'description': 'หูฟังบลูทูธระดับพรีเมียม',
+        'name': 'สมุดระบายความคิด (Mind Dump Journal)',
+        'price': 149,
+        'category': 'หมวดพัฒนาความคิดและจิตใจ',
+        'description': 'สมุดเส้นเปล่าสำหรับเขียนความรู้สึกทันทีหลังตื่นนอน เพื่อเคลียร์สมอง',
         'image': 'product5.png'
     },
     {
         'id': 6,
-        'name': 'DJI Air 3S',
-        'price': 34999,
-        'category': 'กล้อง',
-        'description': 'โดรนถ่ายภาพ 4K',
+        'name': 'บันทึกบรรทัดเดียวต่อวัน (One Line A Day)',
+        'price': 79,
+        'category': 'หมวดพัฒนาความคิดและจิตใจ',
+        'description': 'สมุดที่ให้เขียนสั้นๆ เพียงวันละ 1-3 ประโยค ต่อเนื่องกันหลายปี (3-5 ปี)',
         'image': 'product6.png'
+    },
+    {
+        'id': 7,
+        'name': 'บันทึกการประชุม (Meeting Notes)',
+        'price': 79,
+        'category': 'หมวดงานและการเรียน',
+        'description': 'มีช่องสำหรับเขียนหัวข้อ, ผู้เข้าร่วม, มติที่ประชุม และ Action Plan',
+        'image': 'product7.png'
+    },
+    {
+        'id': 8,
+        'name': 'สมุดจดสรุป (Cornell Notebook)',
+        'price': 79,
+        'category': 'หมวดงานและการเรียน',
+        'description': 'สมุดที่แบ่งหน้ากระดาษเป็น 3 ส่วน (จดโน้ต, คีย์เวิร์ด, สรุป) ตามหลักการเรียนรู้',
+        'image': 'product8.png'
+    },
+    {
+        'id': 9,
+        'name': 'สมุดตาราง (Grid/Square Notebook)',
+        'price': 99,
+        'category': 'หมวดงานและการเรียน',
+        'description': 'เหมาะสำหรับสายคำนวณ วาดกราฟ หรือเขียนตัวอักษรภาษาจีน/ญี่ปุ่น',
+        'image': 'product9.png'
     }
 ]
 
@@ -66,7 +89,7 @@ def home():
     else:
         filtered_products = [p for p in PRODUCTS if p['category'] == category]
     
-    categories = ['ทั้งหมด', 'อิเล็กทรอนิกส์', 'คอมพิวเตอร์', 'กล้อง']
+    categories = ['ทั้งหมด', 'หมวดบันทึกประจำวัน', 'หมวดพัฒนาความคิดและจิตใจ', 'หมวดงานและการเรียน']
     cart_count = len(session.get('cart', []))
     
     return render_template("home.html", 

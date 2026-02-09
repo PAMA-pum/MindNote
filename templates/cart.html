@@ -380,10 +380,10 @@
                     {% for item in cart_items %}
                     <div class="cart-item">
                         <div class="item-image">
-                            {% if item.category == 'คอมพิวเตอร์' %}💻
-                            {% elif item.category == 'อิเล็กทรอนิกส์' %}📱
-                            {% elif item.category == 'กล้อง' %}
-                                {% if 'DJI' in item.name %}🚁{% else %}📷{% endif %}
+                            {% if item.category == 'หมวดบันทึกประจำวัน' %}
+                            {% elif item.category == 'หมวดพัฒนาความคิดและจิตใจ' %}
+                            {% elif item.category == 'หมวดงานและการเรียน' %}
+                                {% if 'DJI' in item.name %}{% else %}{% endif %}
                             {% else %}📦{% endif %}
                         </div>
                         <div class="item-details">
@@ -436,7 +436,7 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 MindNote Shop - ร้านขายของออนไลน์ที่ดีที่สุด</p>
+        <p>&copy; 2025 MindNote Shop - ร้านขายสมุดบันทึก</p>
     </footer>
 
     <script>

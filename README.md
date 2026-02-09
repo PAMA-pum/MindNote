@@ -68,10 +68,23 @@ MindNote/
 pip install flask
 ```
 
-### 2. เรียกใช้ Flask Server
-```bash
+### 2. เรียกใช้ Flask Server (Windows)
+
+**Option A — Double-click (แนะนำ)**
+- ดับเบิลคลิกไฟล์ `start-server.bat` ในโฟลเดอร์โปรเจค (จะเปิดหน้าต่างคอนโซลและรันเซิร์ฟเวอร์ให้อัตโนมัติ)
+
+**Option B — จาก Command Prompt / PowerShell**
+```powershell
 cd "c:\Users\302-Master\Documents\MindNote"
-python app.py
+# ติดตั้ง dependencies (ถ้ายังไม่ได้ติดตั้ง)
+py -3 -m pip install -r requirements.txt
+# หรือใช้ python ถ้าไม่มี py launcher
+# python -m pip install -r requirements.txt
+
+# สตาร์ทแอป
+py -3 app.py
+# หรือ
+# python app.py
 ```
 
 ### 3. เปิดบราวเซอร์
