@@ -1,13 +1,333 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="th">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-  </head>
-  <body>
-    <p>first name: {{ firstName }}</p>
-    <p>last name: {{ lastName }}</p>
-    <p>age:  {{ age }}</p>
-  </body>
+    <title>เกี่ยวกับเรา - MindNote Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Prompt', 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-hero {
+            background: white;
+            border-radius: 10px;
+            padding: 60px 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            color: #667eea;
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .about-hero p {
+            font-size: 18px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .about-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .about-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
+
+        .about-card h2 {
+            color: #667eea;
+            font-size: 24px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .about-card p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 15px;
+        }
+
+        .about-card ul {
+            margin-top: 15px;
+            margin-left: 20px;
+            color: #666;
+            line-height: 1.9;
+        }
+
+        .about-card li {
+            margin-bottom: 10px;
+        }
+
+        .team-section {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .team-section h2 {
+            color: #667eea;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .value-item {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .value-item h3 {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .value-item p {
+            color: #666;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+
+        .footer {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .about-hero {
+                padding: 40px 20px;
+            }
+
+            .about-hero h1 {
+                font-size: 32px;
+            }
+
+            .team-section {
+                padding: 20px;
+            }
+
+            .team-section h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">🎯 MindNote</a>
+            <nav class="nav-links">
+                <a href="/">🏠 หน้าแรก</a>
+                <a href="/cart">🛒 ตะกร้าสินค้า</a>
+                <a href="/about" style="color: hwb(251 35% 13%); font-weight: bold;">ℹ️ เกี่ยวกับเรา</a>
+                {% if is_admin %}
+                    <a href="/admin" style="color: #28a745; font-weight: 600;">⚙️ จัดการสินค้า</a>
+                {% endif %}
+                {% if user_email %}
+                    <span style="color: #666; font-size: 14px;">👤 {{ user_name }}</span>
+                    <a href="/logout" style="color: #ff4757; font-weight: 600;">🚪 ออกจากระบบ</a>
+                {% else %}
+                    <a href="/login" style="color: #667eea; font-weight: 600;">🔐 เข้าสู่ระบบ</a>
+                    <a href="/register" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 15px; border-radius: 6px;">📝 สร้างบัญชี</a>
+                {% endif %}
+                <a href="/cart" class="cart-icon">
+                    🛒
+                    {% if cart_count > 0 %}
+                    <span class="cart-count">{{ cart_count }}</span>
+                    {% endif %}
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="about-hero">
+            <h1>ข้อมูลเกี่ยวกับเรา ร้านMindNote</h1>
+            <p>เราเป็นแพลตฟอร์มที่ทุ่มเทให้กับการนำเสนอสมุดบันทึกคุณภาพสูง เพื่อช่วยให้คุณจัดระเบียบชีวิต เพิ่มประสิทธิภาพการทำงาน และพัฒนาตนเองอย่างต่อเนื่อง</p>
+        </div>
+
+        <div class="about-content">
+            <div class="about-card">
+                <h2>✨ วิสัยทัศน์ของเรา</h2>
+                <p>สร้างอีโคซิสเต็มที่ให้คนทุกคนสามารถจัดระเบียบความคิด บันทึกประสบการณ์ และสร้างสัมฤทธิ์ผลได้ง่าย ผ่านเครื่องมือที่เหมาะสมและสะดวกใช้</p>
+            </div>
+
+            <div class="about-card">
+                <h2>🎯 พันธกิจของเรา</h2>
+                <p>ให้บริการสมุดบันทึกที่มีคุณภาพ หลากหลาย และเข้าถึง เพื่อมอบประสบการณ์ที่ยอดเยี่ยมให้กับลูกค้า พร้อมสนับสนุนการเติบโตและความสำเร็จของพวกเขา</p>
+            </div>
+
+            <div class="about-card">
+                <h2>🤝 ความสัญญาของเรา</h2>
+                <p>เรามุ่งมั่นที่จะให้บริการด้วย:</p>
+                <ul>
+                    <li><strong>คุณภาพสูง</strong> - สินค้าที่ผ่านการคัดเลือกอย่างเข้มงวด</li>
+                    <li><strong>บริการยอดเยี่ยม</strong> - ตอบสนองต่อความต้องการของลูกค้าอย่างรวดเร็ว</li>
+                    <li><strong>ราคาเป็นธรรม</strong> - มูลค่าที่ดีที่สุดสำหรับเงินของคุณ</li>
+                    <li><strong>ความยั่งยืน</strong> - รับผิดชอบต่อสิ่งแวดล้อมและสังคม</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="values-grid">
+            <div class="value-item">
+                <h3>📚 ความเชี่ยวชาญ</h3>
+                <p>ทีมของเราประกอบด้วยผู้เชี่ยวชาญที่มีความรู้ลึก เกี่ยวกับวิธีการบันทึกและการจัดระเบียบที่มีประสิทธิภาพ</p>
+            </div>
+
+            <div class="value-item">
+                <h3>💡 นวัตกรรม</h3>
+                <p>เรามองหาและนำเสนอวิธีใหม่และผลิตภัณฑ์ที่ทันสมัย เพื่อตอบสนองความเปลี่ยนแปลงของตลาด</p>
+            </div>
+
+            <div class="value-item">
+                <h3>👥 ลูกค้าเป็นศูนย์กลาง</h3>
+                <p>พิจารณาการตัดสินใจทั้งหมดตามความต้องการและข้อเสนอแนะของลูกค้า เพื่อให้ได้รับประสบการณ์ที่ดีที่สุด</p>
+            </div>
+
+            <div class="value-item">
+                <h3>🌟 ความเสาะแหน่งสมมูล</h3>
+                <p>เราเชื่อในการส่งมอบค่าที่เป็นสามัญสำนักทั่วโลก ด้วยการสนับสนุนความหลากหลายและการรวมตัว</p>
+            </div>
+        </div>
+
+        <div class="team-section">
+            <h2>📊 จำนวนสินค้าที่เรามี</h2>
+            <div class="values-grid">
+                <div class="value-item" style="border-bottom: 4px solid #667eea; border-left: none;">
+                    <h3 style="font-size: 32px; text-align: center;">9</h3>
+                    <p style="text-align: center; font-size: 16px;">รายการสินค้า</p>
+                </div>
+                <div class="value-item" style="border-bottom: 4px solid #764ba2; border-left: none;">
+                    <h3 style="font-size: 32px; text-align: center;">3</h3>
+                    <p style="text-align: center; font-size: 16px;">หมวดหมู่</p>
+                </div>
+                <div class="value-item" style="border-bottom: 4px solid #ff4757; border-left: none;">
+                    <h3 style="font-size: 32px; text-align: center;">39-149</h3>
+                    <p style="text-align: center; font-size: 16px;">ช่วงราคา (บาท)</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p><strong>📧 ติดต่อเรา:</strong> sdpatthama2212@gmail.com | <strong>📞 โทร:</strong> 09-XXX-8588</p>
+            <p style="margin-top: 15px; font-size: 14px;">© 2026 MindNote Shop. All rights reserved.</p>
+        </div>
+    </div>
+</body>
 </html>

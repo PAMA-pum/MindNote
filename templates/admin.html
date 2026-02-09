@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ควบคุมสินค้า - MindNote Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Prompt', 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            background: white;
+            padding: 15px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-header {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .admin-header h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .admin-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .admin-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .form-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .form-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-family: 'Prompt', 'Nunito', sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .products-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .products-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        .products-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .products-table thead {
+            background: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .products-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .products-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .products-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-edit, .btn-delete {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .btn-edit {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #218838;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            color: #999;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f9f9f9;
+        }
+
+        .upload-area:hover {
+            border-color: #764ba2;
+            background: #f0f0f0;
+        }
+
+        .upload-area.drag-over {
+            border-color: #28a745;
+            background: #e8f5e9;
+        }
+
+        .upload-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .upload-hint {
+            color: #999;
+            font-size: 12px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-preview {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .file-preview.show {
+            display: block;
+        }
+
+        .preview-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .preview-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .preview-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .preview-icon {
+            font-size: 20px;
+            margin-right: 10px;
+        }
+
+        .preview-details {
+            flex: 1;
+        }
+
+        .preview-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .preview-size {
+            color: #999;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .preview-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .preview-remove:hover {
+            background: #c82333;
+        }
+
+        .upload-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            display: none;
+            font-size: 13px;
+        }
+
+        .upload-status.show {
+            display: block;
+        }
+
+        .upload-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .upload-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .upload-status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        @media (max-width: 768px) {
+            .admin-content {
+                grid-template-columns: 1fr;
+            }
+
+            .products-table {
+                font-size: 12px;
+            }
+
+            .products-table th, .products-table td {
+                padding: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="/" class="logo">🎯 MindNote</a>
+            <nav class="nav-links">
+                <a href="/">🏠 หน้าแรก</a>
+                <a href="/admin" style="color: #667eea; font-weight: bold;">⚙️ จัดการสินค้า</a>
+                {% if user_email %}
+                    <span style="color: #666; font-size: 14px;">👤 {{ user_name }}</span>
+                    <a href="/logout" style="color: #ff4757; font-weight: 600;">🚪 ออกจากระบบ</a>
+                {% else %}
+                    <a href="/login" style="color: #667eea; font-weight: 600;">🔐 เข้าสู่ระบบ</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="admin-header">
+            <h1>⚙️ จัดการสินค้า</h1>
+            <p>เพิ่ม แก้ไข และลบสินค้าในร้าน MindNote Shop</p>
+        </div>
+
+        <div class="admin-content">
+            <div class="form-section">
+                <h2>➕ เพิ่มสินค้าใหม่</h2>
+                <div id="addAlert" class="alert"></div>
+                
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label for="productName">📝 ชื่อสินค้า</label>
+                        <input type="text" id="productName" required placeholder="เช่น แพลนเนอร์">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productPrice">💰 ราคา (บาท)</label>
+                        <input type="number" id="productPrice" required min="1" placeholder="เช่น 79">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productCategory">📂 หมวดหมู่</label>
+                        <select id="productCategory" required>
+                            <option value="">-- เลือกหมวดหมู่ --</option>
+                            <option value="หมวดบันทึกประจำวัน">หมวดบันทึกประจำวัน</option>
+                            <option value="หมวดพัฒนาความคิดและจิตใจ">หมวดพัฒนาความคิดและจิตใจ</option>
+                            <option value="หมวดงานและการเรียน">หมวดงานและการเรียน</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">📄 คำอธิบาย</label>
+                        <textarea id="productDescription" required placeholder="คำอธิบายสินค้า"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🖼️ อัพโหลดรูปสินค้า</label>
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-icon">📤</div>
+                            <div class="upload-text">ลากไฟล์มาวางที่นี่หรือคลิกเพื่อเลือก</div>
+                            <div class="upload-hint">รูปแบบที่รองรับ: PNG, JPG, JPEG, GIF, WebP (สูงสุด 16MB)</div>
+                        </div>
+                        <input type="file" id="productImageFile" accept="image/*">
+                        <input type="hidden" id="productImage">
+                        <div class="file-preview" id="filePreview"></div>
+                        <div class="upload-status" id="uploadStatus"></div>
+                    </div>
+
+                    <button type="submit">➕ เพิ่มสินค้า</button>
+                </form>
+            </div>
+
+            <div class="form-section">
+                <h2>📊 สถิติ</h2>
+                <div style="padding: 20px 0;">
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: #999; font-size: 13px;">จำนวนสินค้าทั้งหมด</p>
+                        <p style="font-size: 32px; font-weight: 700; color: #667eea;">{{ products|length }}</p>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <p style="color: #999; font-size: 13px;">หมวดหมู่</p>
+                        <p style="font-size: 24px; font-weight: 700; color: #764ba2;">3</p>
+                    </div>
+
+                    <div style="background: #f5f5f5; padding: 15px; border-radius: 6px; margin-top: 30px;">
+                        <p style="color: #666; font-size: 13px;">✅ สำกัญ: โปรดอย่างใช้ปลายนาย</p>
+                        <p style="color: #666; font-size: 13px; margin-top: 8px;">💡 สร้างกรณี: เพิ่มสินค้าก่อนในไฟล์นี้</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="products-section">
+                <h2>📦 รายการสินค้า</h2>
+                
+                {% if products %}
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>ชื่อสินค้า</th>
+                            <th>ราคา</th>
+                            <th>หมวดหมู่</th>
+                            <th>จำนวน</th>
+                            <th>การดำเนินการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr>
+                            <td>#{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }} บาท</td>
+                            <td>{{ product.category }}</td>
+                            <td><span style="background: #e0e0e0; padding: 4px 10px; border-radius: 12px; font-size: 12px;">1</span></td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-edit" onclick="editProduct({{ product.id }})">✏️ แก้ไข</button>
+                                    <button class="btn-delete" onclick="deleteProduct({{ product.id }})">🗑️ ลบ</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p style="color: #999; text-align: center; padding: 40px;">ยังไม่มีสินค้า</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <div class="modal-header">✏️ แก้ไขสินค้า</div>
+            <div id="editAlert" class="alert"></div>
+
+            <form id="editProductForm">
+                <input type="hidden" id="editProductId">
+                
+                <div class="form-group">
+                    <label for="editProductName">📝 ชื่อสินค้า</label>
+                    <input type="text" id="editProductName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductPrice">💰 ราคา</label>
+                    <input type="number" id="editProductPrice" required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductCategory">📂 หมวดหมู่</label>
+                    <select id="editProductCategory" required>
+                        <option value="หมวดบันทึกประจำวัน">หมวดบันทึกประจำวัน</option>
+                        <option value="หมวดพัฒนาความคิดและจิตใจ">หมวดพัฒนาความคิดและจิตใจ</option>
+                        <option value="หมวดงานและการเรียน">หมวดงานและการเรียน</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductDescription">📄 คำอธิบาย</label>
+                    <textarea id="editProductDescription" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>🖼️ อัพโหลดรูปสินค้า</label>
+                    <div class="upload-area" id="editUploadArea">
+                        <div class="upload-icon">📤</div>
+                        <div class="upload-text">ลากไฟล์มาวางที่นี่หรือคลิกเพื่อเลือก</div>
+                        <div class="upload-hint">รูปแบบที่รองรับ: PNG, JPG, JPEG, GIF, WebP (สูงสุด 16MB)</div>
+                    </div>
+                    <input type="file" id="editProductImageFile" accept="image/*">
+                    <input type="hidden" id="editProductImage">
+                    <div class="file-preview" id="editFilePreview"></div>
+                    <div class="upload-status" id="editUploadStatus"></div>
+                </div>
+
+                <button type="submit">💾 บันทึกการเปลี่ยนแปลง</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ฟังก์ชันสำหรับจัดการการอัพโหลดไฟล์
+        function setupFileUpload(uploadAreaId, fileInputId, hiddenInputId, previewId, statusId) {
+            const uploadArea = document.getElementById(uploadAreaId);
+            const fileInput = document.getElementById(fileInputId);
+            const hiddenInput = document.getElementById(hiddenInputId);
+            const previewDiv = document.getElementById(previewId);
+            const statusDiv = document.getElementById(statusId);
+
+            // คลิกเพื่อเลือกไฟล์
+            uploadArea.addEventListener('click', () => fileInput.click());
+
+            // ลากและวาง
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('drag-over');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('drag-over');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('drag-over');
+                handleFiles(e.dataTransfer.files, fileInput, hiddenInput, previewDiv, statusDiv);
+            });
+
+            // เลือกไฟล์จากปุ่ม
+            fileInput.addEventListener('change', (e) => {
+                handleFiles(e.target.files, fileInput, hiddenInput, previewDiv, statusDiv);
+            });
+        }
+
+        function handleFiles(files, fileInput, hiddenInput, previewDiv, statusDiv) {
+            if (files.length === 0) return;
+
+            const file = files[0];
+
+            // ตรวจสอบประเภทไฟล์
+            const allowedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                showStatus(statusDiv, 'ประเภทไฟล์ไม่ถูกต้อง (รองรับ: PNG, JPG, GIF, WebP)', 'error');
+                return;
+            }
+
+            // ตรวจสอบขนาดไฟล์
+            const maxSize = 16 * 1024 * 1024; // 16MB
+            if (file.size > maxSize) {
+                showStatus(statusDiv, 'ไฟล์มีขนาดใหญ่เกินไป (สูงสุด 16MB)', 'error');
+                return;
+            }
+
+            // อัพโหลดไฟล์
+            uploadFile(file, hiddenInput, previewDiv, statusDiv);
+        }
+
+        function uploadFile(file, hiddenInput, previewDiv, statusDiv) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            showStatus(statusDiv, 'กำลังอัพโหลด...', 'info');
+
+            fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    hiddenInput.value = data.filename;
+                    showFilePreview(file, data.filename, previewDiv, hiddenInput);
+                    showStatus(statusDiv, '✅ ' + data.message, 'success');
+                } else {
+                    showStatus(statusDiv, '❌ ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                showStatus(statusDiv, '❌ เกิดข้อผิดพลาด: ' + error, 'error');
+            });
+        }
+
+        function showFilePreview(file, filename, previewDiv, hiddenInput) {
+            const fileSize = (file.size / 1024).toFixed(2) + ' KB';
+            
+            previewDiv.innerHTML = `
+                <div class="preview-item">
+                    <div class="preview-info">
+                        <div class="preview-icon">🖼️</div>
+                        <div class="preview-details">
+                            <div class="preview-name">${file.name}</div>
+                            <div class="preview-size">${fileSize}</div>
+                        </div>
+                    </div>
+                    <button type="button" class="preview-remove" onclick="removeFile('${hiddenInput.id}', '${previewDiv.id}')">ลบ</button>
+                </div>
+            `;
+            previewDiv.classList.add('show');
+        }
+
+        function removeFile(hiddenInputId, previewId) {
+            document.getElementById(hiddenInputId).value = '';
+            document.getElementById(previewId).classList.remove('show');
+            document.getElementById(previewId).innerHTML = '';
+        }
+
+        function showStatus(statusDiv, message, type) {
+            statusDiv.className = 'upload-status show ' + (type === 'error' ? 'error' : type === 'success' ? 'success' : 'info');
+            statusDiv.textContent = message;
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusDiv.classList.remove('show');
+                }, 3000);
+            }
+        }
+
+        // ตั้งค่าการอัพโหลดไฟล์สำหรับแบบฟอร์มเพิ่ม
+        setupFileUpload('uploadArea', 'productImageFile', 'productImage', 'filePreview', 'uploadStatus');
+
+        // ตั้งค่าการอัพโหลดไฟล์สำหรับแบบฟอร์มแก้ไข
+        setupFileUpload('editUploadArea', 'editProductImageFile', 'editProductImage', 'editFilePreview', 'editUploadStatus');
+
+        // Add product form
+        document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const data = {
+                name: document.getElementById('productName').value,
+                price: parseFloat(document.getElementById('productPrice').value),
+                category: document.getElementById('productCategory').value,
+                description: document.getElementById('productDescription').value,
+                image: document.getElementById('productImage').value
+            };
+
+            try {
+                const response = await fetch('/api/product/add', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                showAlert('addAlert', result.message, result.success);
+
+                if (result.success) {
+                    document.getElementById('addProductForm').reset();
+                    setTimeout(() => location.reload(), 1500);
+                }
+            } catch (error) {
+                showAlert('addAlert', 'เกิดข้อผิดพลาด', false);
+            }
+        });
+
+        // Edit product
+        function editProduct(id) {
+            const product = {{ products|tojson }}.find(p => p.id === id);
+            if (!product) return;
+
+            document.getElementById('editProductId').value = id;
+            document.getElementById('editProductName').value = product.name;
+            document.getElementById('editProductPrice').value = product.price;
+            document.getElementById('editProductCategory').value = product.category;
+            document.getElementById('editProductDescription').value = product.description;
+            document.getElementById('editProductImage').value = product.image;
+
+            document.getElementById('editModal').style.display = 'block';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+
+        document.getElementById('editProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const id = parseInt(document.getElementById('editProductId').value);
+            const data = {
+                id: id,
+                name: document.getElementById('editProductName').value,
+                price: parseFloat(document.getElementById('editProductPrice').value),
+                category: document.getElementById('editProductCategory').value,
+                description: document.getElementById('editProductDescription').value,
+                image: document.getElementById('editProductImage').value
+            };
+
+            try {
+                const response = await fetch('/api/product/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                showAlert('editAlert', result.message, result.success);
+
+                if (result.success) {
+                    setTimeout(() => location.reload(), 1500);
+                }
+            } catch (error) {
+                showAlert('editAlert', 'เกิดข้อผิดพลาด', false);
+            }
+        });
+
+        // Delete product
+        async function deleteProduct(id) {
+            if (!confirm('คุณแน่ใจว่าต้องการลบสินค้านี้?')) return;
+
+            try {
+                const response = await fetch('/api/product/delete', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: id })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                alert('เกิดข้อผิดพลาด');
+            }
+        }
+
+        // Helper function
+        function showAlert(elementId, message, success) {
+            const alert = document.getElementById(elementId);
+            alert.className = 'alert ' + (success ? 'alert-success' : 'alert-error');
+            alert.textContent = (success ? '✅ ' : '❌ ') + message;
+            alert.style.display = 'block';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(e) {
+            const modal = document.getElementById('editModal');
+            if (e.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

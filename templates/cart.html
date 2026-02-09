@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ตะกร้า - MindNote Shop</title>
+    <title>ตะกร้าสินค้า - MindNote Shop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,7 +13,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Prompt', 'Nunito', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -358,9 +359,19 @@
         <div class="header-content">
             <a href="/" class="logo">🛍️ MindNote Shop</a>
             <div class="nav-links">
-                <a href="/">หน้าแรก</a>
-                <a href="/cart">ตะกร้า</a>
-                <a href="/about">เกี่ยวกับเรา</a>
+                <a href="/">🏠 หน้าแรก</a>
+                <a href="/cart"style="color: hwb(251 35% 13%); font-weight: bold;">🛒 ตะกร้าสินค้า</a>
+                <a href="/about">ℹ️ เกี่ยวกับเรา</a>
+                {% if is_admin %}
+                    <a href="/admin" style="color: #28a745; font-weight: 600;">⚙️ จัดการสินค้า</a>
+                {% endif %}
+                {% if user_email %}
+                    <span style="color: #666; font-size: 14px;">👤 {{ user_name }}</span>
+                    <a href="/logout" style="color: #ff4757; font-weight: 600;">🚪 ออกจากระบบ</a>
+                {% else %}
+                    <a href="/login" style="color: #667eea; font-weight: 600;">🔐 เข้าสู่ระบบ</a>
+                    <a href="/register" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 8px 15px; border-radius: 6px;">📝 สร้างบัญชี</a>
+                {% endif %}
                 <a href="/cart" class="cart-icon">
                     🛒
                     {% if cart_count > 0 %}
@@ -372,7 +383,7 @@
     </header>
 
     <div class="container">
-        <div class="cart-title">🛒 ตะกร้าของคุณ</div>
+        <div class="cart-title"> ตะกร้าของคุณ</div>
 
         <div class="cart-content">
             <div class="cart-items">
