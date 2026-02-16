@@ -704,11 +704,12 @@
 
         function showFilePreview(file, filename, previewDiv, hiddenInput) {
             const fileSize = (file.size / 1024).toFixed(2) + ' KB';
-            
+            const url = URL.createObjectURL(file);
+
             previewDiv.innerHTML = `
                 <div class="preview-item">
                     <div class="preview-info">
-                        <div class="preview-icon">🖼️</div>
+                        <img src="${url}" alt="preview" style="width:84px;height:84px;object-fit:cover;border-radius:6px;margin-right:12px;"/>
                         <div class="preview-details">
                             <div class="preview-name">${file.name}</div>
                             <div class="preview-size">${fileSize}</div>
@@ -718,12 +719,51 @@
                 </div>
             `;
             previewDiv.classList.add('show');
+            const img = previewDiv.querySelector('img');
+            if (img) img.onload = () => URL.revokeObjectURL(url);
+        }
+        
+        function removeFile(hiddenInputId, previewId) {
+            if (hiddenInputId) {
+                const hidden = document.getElementById(hiddenInputId);
+                if (hidden) hidden.value = '';
+            }
+            const preview = document.getElementById(previewId);
+            if (preview) {
+                preview.classList.remove('show');
+                preview.innerHTML = '';
+            }
         }
 
-        function removeFile(hiddenInputId, previewId) {
-            document.getElementById(hiddenInputId).value = '';
-            document.getElementById(previewId).classList.remove('show');
-            document.getElementById(previewId).innerHTML = '';
+        function showExistingImagePreview(filename, previewDiv) {
+            if (!filename) return;
+            const uploadUrl = '/static/uploads/' + filename;
+            const imagesUrl = '/static/images/' + filename;
+
+            const img = document.createElement('img');
+            img.alt = 'preview';
+            img.style.width = '84px';
+            img.style.height = '84px';
+            img.style.objectFit = 'cover';
+            img.style.borderRadius = '6px';
+            img.style.marginRight = '12px';
+
+            img.src = uploadUrl;
+            img.onerror = () => { img.src = imagesUrl; };
+
+            previewDiv.innerHTML = `
+                <div class="preview-item">
+                    <div class="preview-info"></div>
+                    <button type="button" class="preview-remove" onclick="removeFile('', '${previewDiv.id}')">ลบ</button>
+                </div>
+            `;
+            const info = previewDiv.querySelector('.preview-info');
+            info.insertAdjacentElement('afterbegin', img);
+            const details = document.createElement('div');
+            details.className = 'preview-details';
+            details.innerHTML = `<div class="preview-name">${filename}</div>`;
+            info.appendChild(details);
+            previewDiv.classList.add('show');
         }
 
         function showStatus(statusDiv, message, type) {
@@ -784,6 +824,13 @@
             document.getElementById('editProductCategory').value = product.category;
             document.getElementById('editProductDescription').value = product.description;
             document.getElementById('editProductImage').value = product.image;
+
+            // show existing image preview if available
+            const editPreview = document.getElementById('editFilePreview');
+            if (editPreview) {
+                editPreview.innerHTML = '';
+                if (product.image) showExistingImagePreview(product.image, editPreview);
+            }
 
             document.getElementById('editModal').style.display = 'block';
         }

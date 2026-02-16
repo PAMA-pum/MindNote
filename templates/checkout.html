@@ -226,20 +226,31 @@
 
         .order-item {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
             font-size: 14px;
             color: #666;
         }
 
+        .order-item img {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex: 0 0 64px;
+        }
+
         .order-item-name {
-            flex-grow: 1;
+            flex: 1 1 auto;
         }
 
         .order-item-price {
             color: #ff4757;
             font-weight: bold;
             text-align: right;
+            flex: 0 0 auto;
+            min-width: 90px;
         }
 
         .summary-row {
@@ -492,6 +503,7 @@
                     {% if cart_items %}
                         {% for item in cart_items %}
                         <div class="order-item">
+                            <img src="/static/uploads/{{ item.image }}" alt="{{ item.name }}" onerror="this.onerror=null;this.src='/static/images/{{ item.image }}'; this.style.display=(this.src? 'inline-block':'none');">
                             <span class="order-item-name">{{ item.name }} x{{ item.quantity }}</span>
                             <span class="order-item-price">฿{{ "{:,}".format(item.subtotal) }}</span>
                         </div>

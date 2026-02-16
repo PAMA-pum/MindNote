@@ -18,6 +18,10 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
+# Database
+import db
+db.init_db()
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -37,81 +41,7 @@ USERS = {
     }
 }
 
-# ข้อมูลสินค้า
-PRODUCTS = [
-    {
-        'id': 1,
-        'name': 'แพลนเนอร์ (Planner)"',
-        'price': 79,
-        'category': 'หมวดบันทึกประจำวัน',
-        'description': 'สมุดสำหรับจดบันทึกสิ่งที่ต้องทำรายวัน รายสัปดาห์ หรือรายเดือน ช่วยให้ไม่ลืมงานสำคัญและจัดลำดับความสำคัญได้ดี',
-        'image': 'แพลนเนอร์ (Planner).png'
-    },
-    {
-        'id': 2,
-        'name': 'สมุดเช็คลิสต์ (Checklist Book)',
-        'price': 49,
-        'category': 'หมวดบันทึกประจำวัน',
-        'description': 'สมุดสำหรับจดบันทึกสิ่งที่ต้องทำรายวัน รายสัปดาห์ หรือรายเดือน ช่วยให้ไม่ลืมงานสำคัญและจัดลำดับความสำคัญได้ดี',
-        'image': 'สมุดเช็คลิสต์ (Checklist Book).png'
-    },
-    {
-        'id': 3,
-        'name': 'สมุดติดตามนิสัย (Habit Tracker)',
-        'price': 39,
-        'category': 'หมวดบันทึกประจำวัน',
-        'description': 'ใช้บันทึกกิจกรรมซ้ำๆ ที่อยากทำเป็นประจำ',
-        'image': 'สมุดติดตามนิสัย (Habit Tracker).png'
-    },
-    {
-        'id': 4,
-        'name': 'บันทึกความสุข (Gratitude Journal)',
-        'price': 59,
-        'category': 'หมวดพัฒนาความคิดและจิตใจ',
-        'description': 'สมุดที่มี Template ให้เขียนขอบคุณเรื่องดีๆ 3 ข้อในแต่ละวัน',
-        'image': 'บันทึกความสุข (Gratitude Journal).png'
-    },
-    {
-        'id': 5,
-        'name': 'สมุดระบายความคิด (Mind Dump Journal)',
-        'price': 149,
-        'category': 'หมวดพัฒนาความคิดและจิตใจ',
-        'description': 'สมุดเส้นเปล่าสำหรับเขียนความรู้สึกทันทีหลังตื่นนอน เพื่อเคลียร์สมอง',
-        'image': 'สมุดระบายความคิด (Mind Dump Journal).png'
-    },
-    {
-        'id': 6,
-        'name': 'บันทึกบรรทัดเดียวต่อวัน (One Line A Day)',
-        'price': 79,
-        'category': 'หมวดพัฒนาความคิดและจิตใจ',
-        'description': 'สมุดที่ให้เขียนสั้นๆ เพียงวันละ 1-3 ประโยค ต่อเนื่องกันหลายปี (3-5 ปี)',
-        'image': 'บันทึกบรรทัดเดียวต่อวัน (One Line A Day).png'
-    },
-    {
-        'id': 7,
-        'name': 'บันทึกการประชุม (Meeting Notes)',
-        'price': 79,
-        'category': 'หมวดงานและการเรียน',
-        'description': 'มีช่องสำหรับเขียนหัวข้อ, ผู้เข้าร่วม, มติที่ประชุม และ Action Plan',
-        'image': 'บันทึกการประชุม (Meeting Notes).png'
-    },
-    {
-        'id': 8,
-        'name': 'สมุดจดสรุป (Cornell Notebook)',
-        'price': 79,
-        'category': 'หมวดงานและการเรียน',
-        'description': 'สมุดที่แบ่งหน้ากระดาษเป็น 3 ส่วน (จดโน้ต, คีย์เวิร์ด, สรุป) ตามหลักการเรียนรู้',
-        'image': 'สมุดจดสรุป (Cornell Notebook).png'
-    },
-    {
-        'id': 9,
-        'name': 'สมุดตาราง (Grid/Square Notebook)',
-        'price': 99,
-        'category': 'หมวดงานและการเรียน',
-        'description': 'เหมาะสำหรับสายคำนวณ วาดกราฟ หรือเขียนตัวอักษรภาษาจีน/ญี่ปุ่น',
-        'image': 'สมุดตาราง (GridSquare Notebook).png'
-    }
-]
+# PRODUCTS moved to SQLite. Use the `db` module for CRUD.
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -192,8 +122,9 @@ def admin():
     user_name = session.get('user_name')
     cart_count = len(session.get('cart', []))
     
+    products = db.get_all_products()
     return render_template('admin.html', 
-                         products=PRODUCTS,
+                         products=products,
                          user_email=user_email,
                          user_name=user_name,
                          cart_count=cart_count)
@@ -257,22 +188,15 @@ def add_product():
     except:
         return jsonify({'success': False, 'message': 'ราคาต้องเป็นตัวเลข'})
     
-    # หาไอดีใหม่
-    new_id = max([p['id'] for p in PRODUCTS]) + 1 if PRODUCTS else 1
-    
-    # เพิ่มสินค้าใหม่
     new_product = {
-        'id': new_id,
         'name': name,
         'price': price,
         'category': category,
         'description': description,
         'image': image if image else 'default.png'
     }
-    
-    PRODUCTS.append(new_product)
-    
-    return jsonify({'success': True, 'message': 'เพิ่มสินค้าสำเร็จแล้ว', 'product': new_product})
+    created = db.add_product(new_product)
+    return jsonify({'success': True, 'message': 'เพิ่มสินค้าสำเร็จแล้ว', 'product': created})
 
 @app.route("/api/product/delete", methods=['POST'])
 def delete_product():
@@ -283,9 +207,7 @@ def delete_product():
     data = request.get_json()
     product_id = data.get('id')
     
-    global PRODUCTS
-    PRODUCTS = [p for p in PRODUCTS if p['id'] != product_id]
-    
+    db.delete_product(product_id)
     return jsonify({'success': True, 'message': 'ลบสินค้าสำเร็จแล้ว'})
 
 @app.route("/api/product/update", methods=['POST'])
@@ -297,27 +219,35 @@ def update_product():
     data = request.get_json()
     product_id = data.get('id')
     
-    product = next((p for p in PRODUCTS if p['id'] == product_id), None)
-    if not product:
+    existing = db.get_product(product_id)
+    if not existing:
         return jsonify({'success': False, 'message': 'ไม่พบสินค้า'})
-    
-    # อัปเดตข้อมูล
-    product['name'] = data.get('name', product['name']).strip()
-    product['price'] = float(data.get('price', product['price']))
-    product['category'] = data.get('category', product['category']).strip()
-    product['description'] = data.get('description', product['description']).strip()
-    product['image'] = data.get('image', product['image']).strip()
-    
-    return jsonify({'success': True, 'message': 'แก้ไขสินค้าสำเร็จแล้ว', 'product': product})
+
+    fields = {}
+    if 'name' in data:
+        fields['name'] = data.get('name', existing['name']).strip()
+    if 'price' in data:
+        try:
+            fields['price'] = float(data.get('price', existing['price']))
+        except:
+            return jsonify({'success': False, 'message': 'ราคาต้องเป็นตัวเลข'})
+    if 'category' in data:
+        fields['category'] = data.get('category', existing.get('category', '')).strip()
+    if 'description' in data:
+        fields['description'] = data.get('description', existing.get('description', '')).strip()
+    if 'image' in data:
+        fields['image'] = data.get('image', existing.get('image', '')).strip()
+
+    updated = db.update_product(product_id, fields)
+    return jsonify({'success': True, 'message': 'แก้ไขสินค้าสำเร็จแล้ว', 'product': updated})
 
 @app.route("/")
 def home():
     category = request.args.get('category', 'ทั้งหมด')
-    
     if category == 'ทั้งหมด':
-        filtered_products = PRODUCTS
+        filtered_products = db.get_all_products()
     else:
-        filtered_products = [p for p in PRODUCTS if p['category'] == category]
+        filtered_products = db.get_products_by_category(category)
     
     categories = ['ทั้งหมด', 'หมวดบันทึกประจำวัน', 'หมวดพัฒนาความคิดและจิตใจ', 'หมวดงานและการเรียน']
     cart_count = len(session.get('cart', []))
@@ -334,6 +264,20 @@ def home():
                          user_name=user_name,
                          is_admin=is_admin)
 
+
+@app.route('/product/<int:product_id>')
+def product_detail(product_id):
+    product = db.get_product(product_id)
+    if not product:
+        return redirect(url_for('home'))
+
+    cart_count = len(session.get('cart', []))
+    user_email = session.get('user_email')
+    user_name = session.get('user_name')
+    is_admin = session.get('is_admin', False)
+
+    return render_template('product.html', product=product, cart_count=cart_count, user_email=user_email, user_name=user_name, is_admin=is_admin)
+
 @app.route("/cart")
 def cart():
     cart_items = session.get('cart', [])
@@ -341,7 +285,7 @@ def cart():
     total = 0
     
     for item in cart_items:
-        product = next((p for p in PRODUCTS if p['id'] == item['id']), None)
+        product = db.get_product(item['id'])
         if product:
             product_copy = product.copy()
             product_copy['quantity'] = item['quantity']
@@ -382,7 +326,7 @@ def checkout():
     total = 0
     
     for item in cart_items:
-        product = next((p for p in PRODUCTS if p['id'] == item['id']), None)
+        product = db.get_product(item['id'])
         if product:
             product_copy = product.copy()
             product_copy['quantity'] = item['quantity']
@@ -457,7 +401,7 @@ def update_cart():
     # คำนวณราคารวม
     total = 0
     for item in cart:
-        product = next((p for p in PRODUCTS if p['id'] == item['id']), None)
+        product = db.get_product(item['id'])
         if product:
             total += product['price'] * item['quantity']
     
@@ -470,7 +414,7 @@ def get_cart():
     total = 0
     
     for item in cart_items:
-        product = next((p for p in PRODUCTS if p['id'] == item['id']), None)
+        product = db.get_product(item['id'])
         if product:
             product_copy = product.copy()
             product_copy['quantity'] = item['quantity']

@@ -336,9 +336,12 @@
         <div class="products-grid">
             {% for product in products %}
             <div class="product-card">
-                <div class="product-image">
-                    <img src="/static/images/{{ product.image }}" alt="{{ product.name }}" onerror="this.style.display='none'">
-                </div>
+                <a href="/product/{{ product.id }}" style="text-decoration:none;color:inherit">
+                    <div class="product-image">
+                        <img src="/static/uploads/{{ product.image }}" alt="{{ product.name }}"
+                             onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src='/static/images/{{ product.image }}';}else{this.style.display='none';}">
+                    </div>
+                </a>
                 <div class="product-info">
                     <div class="product-category">{{ product.category }}</div>
                     <div class="product-name">{{ product.name }}</div>

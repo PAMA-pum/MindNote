@@ -111,6 +111,22 @@
             line-height: 1.6;
         }
 
+        .product-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .product-image img {
+            width: 280px;
+            height: 320px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            display: block;
+        }
+
         .about-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -259,6 +275,15 @@
         <div class="about-hero">
             <h1>ข้อมูลเกี่ยวกับเรา ร้านMindNote</h1>
             <p>เราเป็นแพลตฟอร์มที่ทุ่มเทให้กับการนำเสนอสมุดบันทึกคุณภาพสูง เพื่อช่วยให้คุณจัดระเบียบชีวิต เพิ่มประสิทธิภาพการทำงาน และพัฒนาตนเองอย่างต่อเนื่อง</p>
+        </div>
+
+        <div class="about-card" style="text-align:center;">
+            <h2>🖼️ สินค้าแนะนำ</h2>
+            <div class="product-image">
+                 <img src="/static/uploads/20260216154739_Planner.png" alt="Planner (แพลนเนอร์)"
+                     onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src='/static/images/20260216154739_Planner.png';}else{this.style.display='none';}">
+            </div>
+            <p style="color:#666;">Planner (แพลนเนอร์) — สมุดจดบันทึกสำหรับจัดการงานและความคิด</p>
         </div>
 
         <div class="about-content">
